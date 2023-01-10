@@ -35,7 +35,6 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Cameca.CustomAnalysis.Utilities" Version="3.1.0" />
-		<PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
 	</ItemGroup>
 	
 	<ItemGroup>
