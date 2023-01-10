@@ -21,10 +21,6 @@ using Cameca.CustomAnalysis.Utilities;
 using Cameca.CustomAnalysis.Utilities.Legacy;
 using Cameca.Extensions.Controls;
 using CommunityToolkit.Mvvm.Input;
-using LiveCharts;
-using LiveCharts.Defaults;
-using LiveCharts.Wpf;
-using LiveCharts.Wpf.Charts.Base;
 using Prism.Commands;
 using Color = System.Windows.Media.Color;
 
@@ -38,8 +34,6 @@ internal class ClusterPositionMViewModel : AnalysisViewModelBase<ClusterPosition
 	private readonly IRenderDataFactory _renderDataFactory;
 
 	private IIonDisplayInfo? _ionDisplayInfo = null;
-
-	public SeriesCollection DataSeries { get; } = new();
 
 	public ObservableCollection<IRenderData> ExampleChartData { get; } = new();
 	public ObservableCollection<CheckBoxItem> CheckBoxItemsClu { get; } = new();
@@ -1107,7 +1101,6 @@ internal class ClusterPositionMViewModel : AnalysisViewModelBase<ClusterPosition
 		base.OnCreated(eventArgs);
 		// Event args can be used to get information
 		_ionDisplayInfo = _ionDisplayInfoProvider.Resolve(InstanceId);
-		await UpdateChartDataSeries();
 
 		if (Node?.NodeDataState is not null)
 		{
@@ -1122,28 +1115,8 @@ internal class ClusterPositionMViewModel : AnalysisViewModelBase<ClusterPosition
 
 	private bool CanExecuteUpdate() => !(Node?.NodeDataState?.IsValid ?? false);
 
-	private async Task UpdateChartDataSeries()
-	{
-		DataSeries.Clear();
-
-		if (Node is null) return;
-		var ionCounts = await Node.GetIonTypeCounts();
-		
-		foreach (var (ionTypeInfo, count) in ionCounts)
-		{
-			var seriesItem = new PieSeries
-			{
-				Title = ionTypeInfo.Name,
-				Values = new ChartValues<ObservableValue> { new ObservableValue(count) },
-				DataLabels = false,
-			};
-			// Try to retried ion color and set chart slice to color if possible
-			if (_ionDisplayInfo?.GetColor(ionTypeInfo.Formula) is { } color)
-			{
-				seriesItem.Fill = new SolidColorBrush(color);
-			}
-			DataSeries.Add(seriesItem);
-		}
-	}
+    private async Task UpdateChartDataSeries()
+    {
+    }
 }
 

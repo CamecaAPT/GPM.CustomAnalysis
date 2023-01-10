@@ -25,10 +25,6 @@ using Cameca.CustomAnalysis.Utilities.Legacy;
 using Cameca.Extensions.Controls;
 using CommunityToolkit.HighPerformance;
 using CommunityToolkit.Mvvm.Input;
-using LiveCharts;
-using LiveCharts.Defaults;
-using LiveCharts.Wpf;
-using LiveCharts.Wpf.Charts.Base;
 using Prism.Commands;
 using static GPM.CustomAnalyses.Analyses.ClusterPositionM.ClusterPositionMViewModel;
 using Color = System.Windows.Media.Color;
@@ -43,8 +39,6 @@ internal class ClusterInformationMViewModel : AnalysisViewModelBase<ClusterInfor
 	private readonly IRenderDataFactory _renderDataFactory;
 
 	private IIonDisplayInfo? _ionDisplayInfo = null;
-
-	public SeriesCollection DataSeries { get; } = new();
 
 	public DataTable tableCompo { get; set; }
 	public ObservableCollection<IRenderData> HistoChartData { get; } = new();
@@ -1294,25 +1288,5 @@ internal class ClusterInformationMViewModel : AnalysisViewModelBase<ClusterInfor
 
 	private async Task UpdateChartDataSeries()
 	{
-		DataSeries.Clear();
-
-		if (Node is null) return;
-		var ionCounts = await Node.GetIonTypeCounts();
-		
-		foreach (var (ionTypeInfo, count) in ionCounts)
-		{
-			var seriesItem = new PieSeries
-			{
-				Title = ionTypeInfo.Name,
-				Values = new ChartValues<ObservableValue> { new ObservableValue(count) },
-				DataLabels = false,
-			};
-			// Try to retried ion color and set chart slice to color if possible
-			if (_ionDisplayInfo?.GetColor(ionTypeInfo.Formula) is { } color)
-			{
-				seriesItem.Fill = new SolidColorBrush(color);
-			}
-			DataSeries.Add(seriesItem);
-		}
 	}
 }
