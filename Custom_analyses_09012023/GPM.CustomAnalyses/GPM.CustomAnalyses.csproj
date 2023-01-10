@@ -28,16 +28,8 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <None Remove="Examples\ExampleAnalysis\PieChartIcon.png" />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="Cameca.CustomAnalysis.Utilities" Version="3.1.0" />
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <Resource Include="Images\PieChartIcon.png" />
 	</ItemGroup>
 </Project>
