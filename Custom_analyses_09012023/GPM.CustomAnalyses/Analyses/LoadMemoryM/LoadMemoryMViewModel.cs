@@ -24,10 +24,6 @@ using Cameca.CustomAnalysis.Utilities;
 using Cameca.CustomAnalysis.Utilities.Legacy;
 using Cameca.Extensions.Controls;
 using CommunityToolkit.Mvvm.Input;
-using LiveCharts;
-using LiveCharts.Defaults;
-using LiveCharts.Wpf;
-using LiveCharts.Wpf.Charts.Base;
 using Prism.Commands;
 using Color = System.Windows.Media.Color;
 
