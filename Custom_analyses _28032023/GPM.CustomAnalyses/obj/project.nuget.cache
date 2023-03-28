@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "dgSpecHash": "TxiZyfeH5LwWP9DNohpnSJxuOkj6V4nIjyfWo3aVvlLI+goQrYErQDpqY8wU9EmZuDAYSXFerqtaYewH3Xn/Cg==",
+  "success": true,
+  "projectFilePath": "D:\\Documents\\Desktop\\Custom analyses 232803_benj\\GPM.CustomAnalyses\\GPM.CustomAnalyses.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\cameca.customanalysis.interface\\3.1.0\\cameca.customanalysis.interface.3.1.0.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\cameca.customanalysis.utilities\\3.2.0\\cameca.customanalysis.utilities.3.2.0.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\cameca.extensions.controls\\1.1.0\\cameca.extensions.controls.1.1.0.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\communitytoolkit.highperformance\\8.0.0\\communitytoolkit.highperformance.8.0.0.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\communitytoolkit.mvvm\\8.0.0\\communitytoolkit.mvvm.8.0.0.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\livecharts\\0.9.7\\livecharts.0.9.7.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\livecharts.wpf\\0.9.7\\livecharts.wpf.0.9.7.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.31\\microsoft.xaml.behaviors.wpf.1.1.31.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\prism.core\\8.1.97\\prism.core.8.1.97.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\prism.wpf\\8.1.97\\prism.wpf.8.1.97.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.15\\microsoft.windowsdesktop.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.15\\microsoft.netcore.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\klaesbe1\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.15\\microsoft.aspnetcore.app.ref.6.0.15.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Le package 'LiveCharts 0.9.7' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' au lieu du framework cible du projet 'net6.0-windows7.0'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "libraryId": "LiveCharts",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Le package 'LiveCharts.Wpf 0.9.7' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' au lieu du framework cible du projet 'net6.0-windows7.0'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "libraryId": "LiveCharts.Wpf",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+﻿GPM.CustomAnalyses
+1.0.0.0
+
+library
+C#
+.cs
+D:\Documents\Desktop\Custom analyses 232803_benj\GPM.CustomAnalyses\obj\x64\Debug\
+GPM.CustomAnalyses
+none
+false
+TRACE;DEBUG;NET;NET6_0;NETCOREAPP
+
+5-116558541
+
+34-709985347
+204-1832385969
+Analyses\ClusterInformationM\ClusterInformationMView.xaml;Analyses\ClusteringM\ClusteringMView.xaml;Analyses\ClusterPositionM\ClusterPositionMView.xaml;Analyses\FourierM\FourierMView.xaml;Analyses\LoadMemoryM\LoadMemoryMView.xaml;
+
+False
+
