@@ -6,7 +6,6 @@ using System.Xml.Linq;
 using Cameca.CustomAnalysis.Interface;
 using Cameca.CustomAnalysis.Utilities;
 //using GPM.CustomAnalyses.Analyses.FourierM.Preview;
-using GPM.CustomAnalyses.Images;
 
 namespace GPM.CustomAnalyses.Analyses.FourierM;
 
@@ -19,7 +18,7 @@ internal class FourierMNode : StandardAnalysisNodeBase
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.FourierM.FourierMNode";
 
 	// Adding an icon to the main display info instance and using this instance everywhere ensures common use of any custom icon
-	public static INodeDisplayInfo DisplayInfo { get; } = new NodeDisplayInfo("FourierM", ImageResource.PieChartIcon);
+	public static INodeDisplayInfo DisplayInfo { get; } = new NodeDisplayInfo("FourierM");
 
 	// Expose protected DataState object publicly for access by the ViewModel
 	public INodeDataState? NodeDataState => base.DataState;

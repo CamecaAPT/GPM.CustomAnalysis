@@ -7,7 +7,6 @@ using System.Windows.Media;
 using System.Xml.Linq;
 using Cameca.CustomAnalysis.Interface;
 using Cameca.CustomAnalysis.Utilities;
-using GPM.CustomAnalyses.Images;
 using AnalysisFilterTest.Base;
 using AnalysisFilterTest.SmallExamples;
 using System.Linq;
@@ -24,7 +23,7 @@ internal class DataFilteringMNode : NodeBase<DataFilterExampleProperties, DataFi
 {
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.DataFilteringM.DataFilteringMNode";
 
-	public static INodeDisplayInfo DisplayInfo { get; } = new NodeDisplayInfo("DataFilteringM", ImageResource.PieChartIcon);
+	public static INodeDisplayInfo DisplayInfo { get; } = new NodeDisplayInfo("DataFilteringM");
 
 	private readonly IIonDisplayInfoProvider _ionDisplayInfoProvider;
 	private readonly INodeDataFilterProvider _nodeDataFilterProvider;
