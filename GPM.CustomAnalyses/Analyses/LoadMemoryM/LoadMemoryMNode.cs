@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Xml.Linq;
@@ -24,17 +25,28 @@ internal class LoadMemoryMNode : StandardAnalysisNodeBase
 	public INodeDataState? NodeDataState => base.DataState;
 
 	private readonly IIonDisplayInfoProvider _ionDisplayInfoProvider;
-	private readonly IIonDataProvider _ionDataProvider;
+    private readonly IReconstructionSectionsProvider reconstructionSectionsProvider;
+    private readonly IIonDataProvider _ionDataProvider;
 
 	CAtom Atom = CustomAnalysesModule.Atom;
 	IIonData IonDataMemory;
 
 	public LoadMemoryMNode(
 		IStandardAnalysisNodeBaseServices services,
-		IIonDisplayInfoProvider ionDisplayInfoProvider) : base(services)
+		IIonDisplayInfoProvider ionDisplayInfoProvider,
+        IReconstructionSectionsProvider reconstructionSectionsProvider) : base(services)
 	{
-		_ionDisplayInfoProvider = ionDisplayInfoProvider;	
-	}
+		_ionDisplayInfoProvider = ionDisplayInfoProvider;
+        this.reconstructionSectionsProvider = reconstructionSectionsProvider;
+    }
+
+	internal async Task<bool> EnsureSectionsAvailable(
+		IIonData ionData, IEnumerable<string> sections,
+		IProgress<double>? progress = null, CancellationToken cancellationToken = default)
+	{
+		var reconstructionSections = reconstructionSectionsProvider.Resolve(InstanceId);
+		return await ionData.EnsureSectionsAvailable(sections, reconstructionSections, progress, cancellationToken);
+    }
 
 	protected override byte[]? GetSaveContent()
 	{

@@ -67,17 +67,32 @@ internal class LoadMemoryMViewModel : AnalysisViewModelBase<LoadMemoryMNode>
 		_ionDisplayInfoProvider = ionDisplayInfoProvider;
 		_renderDataFactory = renderDataFactory;
 
-		LoadCommand = new DelegateCommand(LoadAtomMemory);
+        LoadCommand = new AsyncRelayCommand(LoadAtomMemory);
 		CreateTableColumns();
 	}
 
-	public async void LoadAtomMemory()
+	public async Task LoadAtomMemory()
 	{
 		Task<IIonData> IonDataTask = Node.GetIonData1();
 		IIonData IonDataMemory = await IonDataTask;
 		IIonDisplayInfo IonDisplayInfoMemory = Node.GetIonDisplayInfo();
 		Console.WriteLine("Create Atom data memory ...");
-		Atom.bInitMemory2(IonDataMemory, IonDisplayInfoMemory);
+		string[] requiredSections = new string[]{
+			IonDataSectionName.Mass,
+			IonDataSectionName.Position,
+			IonDataSectionName.IonType,
+			IonDataSectionName.Multiplicity,
+			IonDataSectionName.Voltage,
+			IonDataSectionName.DetectorCoordinates,
+		};
+		bool sectionsAvailable = await Node.EnsureSectionsAvailable(IonDataMemory, requiredSections);
+		if (!sectionsAvailable)
+		{
+			Console.WriteLine("ERROR: One or more required sections are not available");
+            // TODO: ionData.EnsureSectionsAvailable doesn't return what section was missing at this time: possible future enhancment
+            return;
+		}
+        Atom.bInitMemory2(IonDataMemory, IonDisplayInfoMemory);
 
 		DataRow newRow = tableInfos.NewRow();
 		newRow[0] = Atom.iMemSize;
