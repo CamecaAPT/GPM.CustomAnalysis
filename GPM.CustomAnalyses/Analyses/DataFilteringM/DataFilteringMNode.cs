@@ -7,18 +7,21 @@ using System.Windows.Media;
 using System.Xml.Linq;
 using Cameca.CustomAnalysis.Interface;
 using Cameca.CustomAnalysis.Utilities;
-using AnalysisFilterTest.Base;
-using AnalysisFilterTest.SmallExamples;
+using GPM.CustomAnalyses.Base;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace GPM.CustomAnalyses.Analyses.DataFilteringM;
+
+public class DataFilterExampleProperties : ObservableObject { }
+
+public class DataFilterExampleSaveState : AnalysisFilterSaveState<DataFilterExampleProperties> { }
 
 // AnalysisNodeBase and variants (Standard/Legacy) use DefaultViewAttribute to easily link views with the main analysis.
 // Base node will create these views when analysis is first created or the node is double-clicked if the view was closed.
 // DefaultViewAttribute supports multiple instances, so a single analysis could easily control more than one view.
 [DefaultView(DataFilteringMViewModel.UniqueId, typeof(DataFilteringMViewModel))]
 [NodeType(NodeType.DataFilter)]
-
 internal class DataFilteringMNode : NodeBase<DataFilterExampleProperties, DataFilterExampleSaveState>
 {
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.DataFilteringM.DataFilteringMNode";
