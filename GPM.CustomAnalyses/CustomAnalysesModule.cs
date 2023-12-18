@@ -20,7 +20,6 @@ using Prism.Modularity;
 using GPM.CustomAnalyses.Analyses.ClusteringM;
 using GPM.CustomAnalyses.Analyses.LoadMemoryM;
 using GPM.CustomAnalyses.Analyses.FourierM;
-using GPM.CustomAnalyses.Analyses.Reconstruction3DM;
 using AnalysisFilterTest.SmallExamples;
 using GPM.CustomAnalyses.Analyses.DataFilteringM;
 
@@ -102,12 +101,6 @@ public class CustomAnalysesModule : IModule
 		containerRegistry.Register<object, FourierMViewModel>(FourierMViewModel.UniqueId);
 
 		// Reconstruction 3d Menu
-		containerRegistry.Register<object, Reconstruction3DMNode>(Reconstruction3DMNode.UniqueId);
-		containerRegistry.RegisterInstance(Reconstruction3DMNode.DisplayInfo, Reconstruction3DMNode.UniqueId);
-		containerRegistry.Register<IAnalysisMenuFactory, Reconstruction3DMMenuFactory>(nameof(Reconstruction3DMMenuFactory));
-		containerRegistry.Register<object, Reconstruction3DMViewModel>(Reconstruction3DMViewModel.UniqueId);
-
-		// Reconstruction 3d Menu
 		containerRegistry.Register<object, DataFilteringMNode>(DataFilteringMNode.UniqueId);
 		containerRegistry.RegisterInstance(DataFilteringMNode.DisplayInfo, DataFilteringMNode.UniqueId);
 		containerRegistry.Register<IAnalysisMenuFactory, DataFilteringMMenuFactory>(nameof(DataFilteringMMenuFactory));
@@ -163,7 +156,6 @@ public class CustomAnalysesModule : IModule
 		extensionRegistry.RegisterAnalysisView<ClusterInformationMView, ClusterInformationMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<LoadMemoryMView, LoadMemoryMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<FourierMView, FourierMViewModel>(AnalysisViewLocation.Top);
-		extensionRegistry.RegisterAnalysisView<Reconstruction3DMView, Reconstruction3DMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<DataFilteringMView, DataFilteringMViewModel>(AnalysisViewLocation.Top);
 
 		// Examples
