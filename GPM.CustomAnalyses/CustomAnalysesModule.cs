@@ -10,7 +10,6 @@ using GPM.CustomAnalyses.Analyses.ClusterPosition;
 using GPM.CustomAnalyses.Analyses.MassSpectrum;
 using GPM.CustomAnalyses.Analyses.FrequencyDistribution;
 using GPM.CustomAnalyses.Analyses.SaxeyDiagram;
-using GPM.CustomAnalyses.Analyses.TestModuleM;
 using GPM.CustomAnalyses.Analyses.FourierTransform;
 using GPM.CustomAnalyses.Analyses.ClusterPositionM;
 using GPM.CustomAnalyses.Analyses.ClusterInformationM;
@@ -147,17 +146,6 @@ public class CustomAnalysesModule : IModule
 		//containerRegistry.Register<object, SamplingDataFilterNode>(SamplingDataFilterNode.UniqueId);
 		//containerRegistry.RegisterInstance(SamplingDataFilterNode.DisplayInfo, SamplingDataFilterNode.UniqueId);
 		//containerRegistry.Register<IAnalysisMenuFactory, SamplingDataFilterMenuFactory>(nameof(SamplingDataFilterMenuFactory));
-
-
-
-		// TestModuleM
-		containerRegistry.Register<object, TestModuleMNode>(TestModuleMNode.UniqueId);
-		containerRegistry.RegisterInstance(TestModuleMNode.DisplayInfo, TestModuleMNode.UniqueId);
-		containerRegistry.Register<IAnalysisMenuFactory, TestModuleMMenuFactory>(nameof(TestModuleMMenuFactory));
-		containerRegistry.Register<object, TestModuleMViewModel>(TestModuleMViewModel.UniqueId);
-
-
-
 	}
 
 	public void OnInitialized(IContainerProvider containerProvider)
@@ -176,7 +164,6 @@ public class CustomAnalysesModule : IModule
 		extensionRegistry.RegisterAnalysisView<LoadMemoryMView, LoadMemoryMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<FourierMView, FourierMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<Reconstruction3DMView, Reconstruction3DMViewModel>(AnalysisViewLocation.Top);
-		extensionRegistry.RegisterAnalysisView<TestModuleMView, TestModuleMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<DataFilteringMView, DataFilteringMViewModel>(AnalysisViewLocation.Top);
 
 		// Examples
