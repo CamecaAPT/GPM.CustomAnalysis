@@ -1,0 +1,20 @@
+﻿GPM.CustomAnalyses
+
+
+library
+C#
+.cs
+D:\Documents\Desktop\Travail\Labo\APsuite\Custom analysis\Custom analyses 231204_benj\GPM.CustomAnalyses\obj\x64\Debug\
+GPM.CustomAnalyses
+none
+false
+TRACE;DEBUG;NET;NET6_0;NETCOREAPP
+
+7-1495682626
+
+80-1122317319
+204-1822435670
+Analyses\ClusterInformationM\ClusterInformationMView.xaml;Analyses\ClusteringM\ClusteringMView.xaml;Analyses\ClusterPositionM\ClusterPositionMView.xaml;Analyses\FourierM\FourierMView.xaml;Analyses\LoadMemoryM\LoadMemoryMView.xaml;Analyses\Reconstruction3DM\Reconstruction3DMView.xaml;Analyses\SpatialPerfM\SpatialPerfMView.xaml;
+
+False
+

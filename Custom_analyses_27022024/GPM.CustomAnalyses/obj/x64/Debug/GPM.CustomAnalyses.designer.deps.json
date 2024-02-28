@@ -1,0 +1,180 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Cameca.CustomAnalysis.Interface/3.3.0-alpha.11": {
+        "dependencies": {
+          "CommunityToolkit.HighPerformance": "8.0.0",
+          "Prism.Core": "8.1.97"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Cameca.CustomAnalysis.Interface.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.0.0"
+          }
+        }
+      },
+      "Cameca.CustomAnalysis.Utilities/3.5.0-alpha.7": {
+        "dependencies": {
+          "Cameca.CustomAnalysis.Interface": "3.3.0-alpha.11",
+          "Cameca.Extensions.Controls": "1.2.0",
+          "CommunityToolkit.Mvvm": "8.0.0",
+          "Prism.Wpf": "8.1.97"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Cameca.CustomAnalysis.Utilities.dll": {
+            "assemblyVersion": "3.5.0.0",
+            "fileVersion": "3.5.0.0"
+          }
+        }
+      },
+      "Cameca.Extensions.Controls/1.2.0": {
+        "runtime": {
+          "lib/net6.0-windows7.0/Cameca.Extensions.Controls.dll": {
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
+          }
+        }
+      },
+      "CommunityToolkit.HighPerformance/8.0.0": {
+        "runtime": {
+          "lib/net6.0/CommunityToolkit.HighPerformance.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.0.1"
+          }
+        }
+      },
+      "CommunityToolkit.Mvvm/8.0.0": {
+        "runtime": {
+          "lib/net6.0/CommunityToolkit.Mvvm.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.0.1"
+          }
+        }
+      },
+      "LiveCharts/0.9.7": {
+        "runtime": {
+          "lib/net45/LiveCharts.dll": {
+            "assemblyVersion": "0.9.7.0",
+            "fileVersion": "0.9.7.0"
+          }
+        }
+      },
+      "LiveCharts.Wpf/0.9.7": {
+        "dependencies": {
+          "LiveCharts": "0.9.7"
+        },
+        "runtime": {
+          "lib/net45/LiveCharts.Wpf.dll": {
+            "assemblyVersion": "0.9.7.0",
+            "fileVersion": "0.9.7.0"
+          }
+        }
+      },
+      "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
+        "runtime": {
+          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.31.10800"
+          }
+        }
+      },
+      "Prism.Core/8.1.97": {
+        "runtime": {
+          "lib/net5.0/Prism.dll": {
+            "assemblyVersion": "8.1.97.5141",
+            "fileVersion": "8.1.97.5141"
+          }
+        }
+      },
+      "Prism.Wpf/8.1.97": {
+        "dependencies": {
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.31",
+          "Prism.Core": "8.1.97"
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/Prism.Wpf.dll": {
+            "assemblyVersion": "8.1.97.5141",
+            "fileVersion": "8.1.97.5141"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Cameca.CustomAnalysis.Interface/3.3.0-alpha.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VWin7B1tZC+HakCIceZbrVKr009+yNJHMVxxUe462iBWvRbhkJOc2g5SFCqw2DWmpgbMg/OJyJBANMssXyxnyg==",
+      "path": "cameca.customanalysis.interface/3.3.0-alpha.11",
+      "hashPath": "cameca.customanalysis.interface.3.3.0-alpha.11.nupkg.sha512"
+    },
+    "Cameca.CustomAnalysis.Utilities/3.5.0-alpha.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xidYjqkQ4MY6+DYTC5Ei1S+BtnBSRSwnUB1mzJp097YUe1tdvJuL5iTZyZoi/64fBFhT4Kt5iH3UCkLDMiynqQ==",
+      "path": "cameca.customanalysis.utilities/3.5.0-alpha.7",
+      "hashPath": "cameca.customanalysis.utilities.3.5.0-alpha.7.nupkg.sha512"
+    },
+    "Cameca.Extensions.Controls/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hACNseWNcLdjwitXHJ0On69i+pA0Zf35AobUF0kWtdeqidbxC5xr5mtCaj2p+RTglToVt3ANxjgLGphwhnKvQg==",
+      "path": "cameca.extensions.controls/1.2.0",
+      "hashPath": "cameca.extensions.controls.1.2.0.nupkg.sha512"
+    },
+    "CommunityToolkit.HighPerformance/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-S5Iv1d5UJZNJLJbe/xzJmLqYJ2mhefbLAvhXCZEh3G4sFadUBuQZhQioE4oJG4enY69QMuJX3AX9+6P9rH1bMw==",
+      "path": "communitytoolkit.highperformance/8.0.0",
+      "hashPath": "communitytoolkit.highperformance.8.0.0.nupkg.sha512"
+    },
+    "CommunityToolkit.Mvvm/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Jiu2g5WUdXRwzhJkHB+B4JBKP5A5+fp8xKiW/ZQo5PI+DruI7MbPEcK9K/Aw0YzTiWRuG6CBluzYIWN5Eo7BkQ==",
+      "path": "communitytoolkit.mvvm/8.0.0",
+      "hashPath": "communitytoolkit.mvvm.8.0.0.nupkg.sha512"
+    },
+    "LiveCharts/0.9.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p4xyBrUaNNfkWZSNsIle0r51cyVyFg0Yi0uBRZM5GQtdFiA/7guZHlffFyNUILIdux10Ch2hUaJpcZENVU9aaQ==",
+      "path": "livecharts/0.9.7",
+      "hashPath": "livecharts.0.9.7.nupkg.sha512"
+    },
+    "LiveCharts.Wpf/0.9.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lv6YZoK0B4yWykMq5b9grZXtIbTj+OWu4sVN9GDpdgV6zffu64m4d5CW8KSjfSl9rB8VU649x1NZvhoU67hCDg==",
+      "path": "livecharts.wpf/0.9.7",
+      "hashPath": "livecharts.wpf.0.9.7.nupkg.sha512"
+    },
+    "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LZpuf82ACZWldmfMuv3CTUMDh3o0xo0uHUaybR5HgqVLDBJJ9RZLykplQ/bTJd0/VDt3EhD4iDgUgbdIUAM+Kg==",
+      "path": "microsoft.xaml.behaviors.wpf/1.1.31",
+      "hashPath": "microsoft.xaml.behaviors.wpf.1.1.31.nupkg.sha512"
+    },
+    "Prism.Core/8.1.97": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EP5zrvWddw3eSq25Y7hHnDYdmLZEC2Z/gMrvmHzUuLbitmA1UaS7wQUlSwNr9Km8lzJNCvytFnaGBEFukHgoHg==",
+      "path": "prism.core/8.1.97",
+      "hashPath": "prism.core.8.1.97.nupkg.sha512"
+    },
+    "Prism.Wpf/8.1.97": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZEa6S1mK35h8/blyb0uR0ed3wkpHtPdhB4eniXINJnTiJMWlGl/As6SVlFFdOPD+qsEdWNYV3xgyQD/ue5cvBA==",
+      "path": "prism.wpf/8.1.97",
+      "hashPath": "prism.wpf.8.1.97.nupkg.sha512"
+    }
+  }
+}
