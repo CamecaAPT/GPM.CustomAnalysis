@@ -9,7 +9,6 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<RootNamespace>GPM.CustomAnalyses</RootNamespace>
 		<AssemblyName>GPM.CustomAnalyses</AssemblyName>
-		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Direct Output">
@@ -38,7 +37,6 @@
 		<PackageReference Include="Cameca.CustomAnalysis.Interface" Version="3.3.0-alpha.11" />
 		<PackageReference Include="Cameca.CustomAnalysis.Utilities" Version="3.5.0-alpha.7" />
 		<PackageReference Include="Cameca.Extensions.Controls" Version="1.2.0" />
-		<PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
 	</ItemGroup>
 	
 	<ItemGroup>
