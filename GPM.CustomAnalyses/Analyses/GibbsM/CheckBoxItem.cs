@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Media;
 
-namespace GPM.CustomAnalyses.Analyses.ClusteringM;
+namespace GPM.CustomAnalyses.Analyses.GibbsM;
 
 internal class CheckBoxItem : BindableBase
 {

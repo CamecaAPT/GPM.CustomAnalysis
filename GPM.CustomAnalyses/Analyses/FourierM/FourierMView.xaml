@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GPM.CustomAnalyses.Analyses.FourierM"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:controls="clr-namespace:Cameca.Extensions.Controls;assembly=Cameca.Extensions.Controls"
              xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
              mc:Ignorable="d"
@@ -39,7 +40,7 @@
                         <controls:Histogram2D  DataSource="{Binding dataSFT}"/>
                     </TabItem>
                 </TabControl>
-
+                <ScrollViewer Height="500" Margin="0,0,0,-250">
                 <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Orientation="Vertical" Margin="0,0,0,0">
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type Button}">
@@ -48,8 +49,8 @@
                         </Style>
                     </StackPanel.Resources>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Load Memory" Command="{Binding LoadAtomMemoryCommand}" Width="130" />
-                        <Button Content="Update" Command="{Binding UpdateCommand}" Width="130"/>
+                        <Button Content="Update Memory" Command="{Binding LoadAtomMemoryCommand}" Width="130" />
+
                     </StackPanel>
                     <ProgressBar x:Name="progressBar" Minimum="0" Maximum="100" Value="{Binding CurrentProgress}" Height="20"/>
                     <ListBox ItemsSource="{Binding CheckBoxItemsElt}" Height="131" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -103,7 +104,43 @@
                         <TextBox Margin="3" Text="{Binding sThreshold}" Width="50"/>
                         <Button Content="Filter" Command="{Binding FilterCommand}" Margin="3" Width="80"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Spatial performances ----------------------------------------------"  Margin="3"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Rotation angle (°)"  Margin="3"/>
+                        <Label Content=" X:"  Margin="3"/>
+                        <TextBox Margin="3" Text="{Binding sRotX}" Width="45"/>
+                        <Label Content=" Y:"  Margin="3"/>
+                        <TextBox Margin="3" Text="{Binding sRotY}" Width="45"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Smooth size"  Margin="3"/>
+                            <TextBox Margin="3" Text="{Binding sSmooth}" Width="50"/>
+                        </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Threshold (%)"  Margin="3"/>
+                        <TextBox Margin="3" Text="{Binding sThresholdPerf}" Width="50"/>
+                    </StackPanel>
+                    <!--
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="E(V/nm)"  Margin="3"/>
+                        <TextBox Margin="3" Text="{Binding sField}" Width="50"/>
+                        <Label Content="kF"  Margin="3"/>
+                        <TextBox Margin="3" Text="{Binding sKF}" Width="50"/>
+                        <Label Content="R(nm)"  Margin="3"/>
+                        <TextBox Margin="3" Text="{Binding sRadius}" Width="50" IsReadOnly="True"/>
+                    </StackPanel>
+                    -->
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Resolution (A)"  Margin="3"/>
+                        <TextBox Margin="3" Text="{Binding sResolution}" Width="50" IsReadOnly="True"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Calcul Resolution" Command="{Binding ResolutionCommand}" Margin="3" Width="150"/>
+                    </StackPanel>
                 </StackPanel>
+                    </ScrollViewer>
             </Grid>
         </Grid>
         <!-- Demonstration of possible method of handling data update that matches AP Suite. Overlay blocking access to analysis that is displayed when updates are required -->

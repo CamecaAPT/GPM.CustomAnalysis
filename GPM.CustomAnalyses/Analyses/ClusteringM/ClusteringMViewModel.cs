@@ -24,10 +24,15 @@ using Cameca.CustomAnalysis.Utilities;
 using Cameca.CustomAnalysis.Utilities.Legacy;
 using Cameca.Extensions.Controls;
 using CommunityToolkit.Mvvm.Input;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
+using LiveCharts.Wpf.Charts.Base;
 using Prism.Commands;
 using Color = System.Windows.Media.Color;
 using static GPM.CustomAnalyses.fctGlob;
 using static GPM.CustomAnalyses.varGlob;
+using System.Runtime.CompilerServices;
 
 namespace GPM.CustomAnalyses.Analyses.ClusteringM;
 
@@ -40,12 +45,9 @@ internal class ClusteringMViewModel : AnalysisViewModelBase<ClusteringMNode>
 
 	private IIonDisplayInfo? _ionDisplayInfo = null;
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public SeriesCollection DataSeries { get; } = new();
 
-	protected virtual void OnPropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+	public event PropertyChangedEventHandler PropertyChanged;
 
 	public DataTable tableCompo { get; set; }
 	public ObservableCollection<IRenderData> ExampleChartData { get; } = new();
@@ -123,13 +125,22 @@ internal class ClusteringMViewModel : AnalysisViewModelBase<ClusteringMNode>
 		AtomFilteringCommand = new DelegateCommand(AtomFiltering);
 		AtomClusteringCommand = new DelegateCommand(AtomClustering);
 		LoadAtomMemoryCommand = new DelegateCommand(LoadAtomMemory);
-		UpdateEltCommand = new DelegateCommand(UpdateElt);
+		//UpdateEltCommand = new DelegateCommand(UpdateElt);
 
 		Array.Fill(bEltSelected, false);
 		
 		Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
 		Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
+	}
+
+	protected override void OnAdded(ViewModelAddedEventArgs eventArgs)
+	{
+		//Keep this line for base class add work
+		Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+		Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+		base.OnAdded(eventArgs);
+		LoadAtomMemory();
 	}
 
 	IIonData IonDataMemory;
@@ -265,7 +276,14 @@ internal class ClusteringMViewModel : AnalysisViewModelBase<ClusteringMNode>
 			nouvelleColonne = new DataColumn("Compo " + elt.Name[i], typeof(float));
 			tableCompo.Columns.Add(nouvelleColonne);
 		}
-		OnPropertyChanged(nameof(tableCompo));
+		//OnPropertyChanged(nameof(tableCompo));
+		RefreshTableCompo();
+	}
+
+	private void RefreshTableCompo()
+	{
+		tableCompo = tableCompo.Copy();
+		RaisePropertyChanged(nameof(tableCompo));
 	}
 
 	private void AtomFiltering()
@@ -791,8 +809,9 @@ internal class ClusteringMViewModel : AnalysisViewModelBase<ClusteringMNode>
 
 				Console.WriteLine("Test : i = {0}    NbAtom0 = {1}", i, iNbAtomElt[i, 0]);
 			}
+			RefreshTableCompo();
 
-			OnPropertyChanged(nameof(tableCompo));
+			//OnPropertyChanged(nameof(tableCompo));
 
 			// Save data in atom file
 			// -------------------------
@@ -861,6 +880,26 @@ internal class ClusteringMViewModel : AnalysisViewModelBase<ClusteringMNode>
 
 	private async Task UpdateChartDataSeries()
 	{
+		DataSeries.Clear();
+
+		if (Node is null) return;
+		var ionCounts = await Node.GetIonTypeCounts();
+		
+		foreach (var (ionTypeInfo, count) in ionCounts)
+		{
+			var seriesItem = new PieSeries
+			{
+				Title = ionTypeInfo.Name,
+				Values = new ChartValues<ObservableValue> { new ObservableValue(count) },
+				DataLabels = false,
+			};
+			// Try to retried ion color and set chart slice to color if possible
+			if (_ionDisplayInfo?.GetColor(ionTypeInfo.Formula) is { } color)
+			{
+				seriesItem.Fill = new SolidColorBrush(color);
+			}
+			DataSeries.Add(seriesItem);
+		}
 	}
 }
 

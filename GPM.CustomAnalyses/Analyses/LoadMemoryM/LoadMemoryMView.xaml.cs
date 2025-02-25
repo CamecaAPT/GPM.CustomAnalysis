@@ -10,18 +10,16 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Data;
 
-namespace GPM.CustomAnalyses.Analyses.ClusteringM;
+namespace GPM.CustomAnalyses.Analyses.LoadMemoryM;
 /// <summary>
-/// Interaction logic for ClusteringMView.xaml
+/// Interaction logic for LoadMemoryMView.xaml
 /// </summary>
-public partial class ClusteringMView : UserControl
+public partial class LoadMemoryMView : UserControl
 {
-	public ClusteringMView()
+	CAtom Atom = CustomAnalysesModule.Atom;
+	public LoadMemoryMView()
 	{
 		InitializeComponent();
-		ComboBoxFiltering.Items.Add("Composition Grid");
-		ComboBoxFiltering.Items.Add("Local Composition");
-		ComboBoxClustering.Items.Add("Atomic Distance");
 	}
 
 	public Func<ChartPoint, string> PointLabel { get; set; }
@@ -38,10 +36,7 @@ public partial class ClusteringMView : UserControl
 		selectedSeries.PushOut = 8;
 	}
 
-	public void test()
-	{
-		dataGrid.UpdateLayout();
-	}
+
 
 	private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
 	{

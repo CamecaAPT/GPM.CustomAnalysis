@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Cameca.CustomAnalysis.Interface;
 using Cameca.CustomAnalysis.Utilities;
 //using GPM.CustomAnalyses.Analyses.ClusteringM.Preview;
+using GPM.CustomAnalyses.Images;
 
 namespace GPM.CustomAnalyses.Analyses.ClusteringM;
 
@@ -18,7 +19,7 @@ internal class ClusteringMNode : StandardAnalysisNodeBase
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.ClusteringM.ClusteringMNode";
 
 	// Adding an icon to the main display info instance and using this instance everywhere ensures common use of any custom icon
-	public static INodeDisplayInfo DisplayInfo { get; } = new NodeDisplayInfo("ClusteringM");
+	public static INodeDisplayInfo DisplayInfo { get; } = new NodeDisplayInfo("ClusteringM", ImageResource.PieChartIcon);
 
 	// Expose protected DataState object publicly for access by the ViewModel
 	public INodeDataState? NodeDataState => base.DataState;

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GPM.CustomAnalyses.Analyses.ClusterInformationM"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:controls="clr-namespace:Cameca.Extensions.Controls;assembly=Cameca.Extensions.Controls"
              xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
              xmlns:controls2="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
@@ -57,8 +58,7 @@
                         </Style>
                     </StackPanel.Resources>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Load Memory" Command="{Binding LoadAtomMemoryCommand}" Width="130" />
-                        <Button Content="Update" Command="{Binding UpdateRepCommand}" Width="130"/>
+                        <Button Content="Update Memory" Command="{Binding LoadAtomMemoryCommand}" Width="130" />
                     </StackPanel>
                     <Label Content="Cluster -----------------------------------"/>
                     <ListBox ItemsSource="{Binding CheckBoxItemsClu}" Height="131" ScrollViewer.HorizontalScrollBarVisibility="Disabled">

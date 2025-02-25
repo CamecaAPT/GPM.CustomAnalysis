@@ -10,18 +10,19 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Data;
 
-namespace GPM.CustomAnalyses.Analyses.ClusteringM;
+namespace GPM.CustomAnalyses.Analyses.GibbsM;
 /// <summary>
-/// Interaction logic for ClusteringMView.xaml
+/// Interaction logic for GibbsMView.xaml
 /// </summary>
-public partial class ClusteringMView : UserControl
+public partial class GibbsMView : UserControl
 {
-	public ClusteringMView()
+	CAtom Atom = CustomAnalysesModule.Atom;
+	public GibbsMView()
 	{
 		InitializeComponent();
-		ComboBoxFiltering.Items.Add("Composition Grid");
-		ComboBoxFiltering.Items.Add("Local Composition");
-		ComboBoxClustering.Items.Add("Atomic Distance");
+		ProfilType.Items.Add("Nb Atoms");
+		ProfilType.Items.Add("Percent");
+		ProfilType.SelectedIndex = 1;
 	}
 
 	public Func<ChartPoint, string> PointLabel { get; set; }
@@ -38,10 +39,7 @@ public partial class ClusteringMView : UserControl
 		selectedSeries.PushOut = 8;
 	}
 
-	public void test()
-	{
-		dataGrid.UpdateLayout();
-	}
+	
 
 	private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
 	{
@@ -52,5 +50,4 @@ public partial class ClusteringMView : UserControl
 	{
 
 	}
-
 }

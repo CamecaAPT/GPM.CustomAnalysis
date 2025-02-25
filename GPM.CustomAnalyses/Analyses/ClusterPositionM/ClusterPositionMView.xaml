@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GPM.CustomAnalyses.Analyses.ClusterPositionM"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:controls="clr-namespace:Cameca.Extensions.Controls;assembly=Cameca.Extensions.Controls"
              xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
              mc:Ignorable="d"
@@ -32,7 +33,7 @@
                 <controls:Chart3D Grid.Row="0" Grid.Column="1"  Grid.RowSpan="1"
                                   DataSource="{Binding ExampleChartData}">
                 </controls:Chart3D>
-                <ScrollViewer Height="450" Margin="0,0,0,104">
+                <ScrollViewer Height="500" Margin="0,0,0,250">
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Margin="0,0,0,0">
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type Button}">
@@ -41,9 +42,8 @@
                         </Style>
                     </StackPanel.Resources>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Load Memory" Command="{Binding LoadmMemoryCommand}" Width="130"/>
-                        <Button Content="Update" Command="{Binding UpdateRepCommand}" Width="130"/>
-                    </StackPanel>
+                            <Button Content="Update Memory" Command="{Binding LoadmMemoryCommand}" Width="130"/>
+                        </StackPanel>
                     <Label Content="Cluster -----------------------------------"/>
                     <StackPanel Orientation="Horizontal">
                         <RadioButton x:Name="RadioElt" Content="EltColor" Margin="3" IsChecked="True" Command="{Binding UpdateColorCommand}"/>
@@ -147,8 +147,8 @@
                         <TextBox Width="100" Margin="3" Text="{Binding silhThres}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Cluster separation" Margin="3" Command="{Binding KmeansCommand}"/>
-                        <Button Content="Undo separation" Margin="3" Command="{Binding UndoKmeansCommand}"/>
+                        <Button Content="Cluster separation" Margin="3" Command="{Binding KmeansCommand}" Width="140"/>
+                            <Button Content="Undo separation" Margin="3" Command="{Binding UndoKmeansCommand}" Width="140"/>
                     </StackPanel>
                     </StackPanel>
                 </ScrollViewer>

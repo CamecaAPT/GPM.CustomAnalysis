@@ -29,6 +29,10 @@ using Cameca.CustomAnalysis.Utilities.Legacy;
 using Cameca.Extensions.Controls;
 using CommunityToolkit.HighPerformance;
 using CommunityToolkit.Mvvm.Input;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
+using LiveCharts.Wpf.Charts.Base;
 using Prism.Commands;
 using Color = System.Windows.Media.Color;
 using static GPM.CustomAnalyses.varGlob;
@@ -64,13 +68,30 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 	public bool radio3D { get; set; } = false;
 	public bool radioSFT { get; set; } = false;
 	public string sThreshold { get; set; } = "0";
+	public string sSmooth { get; set; } = "2";
+	public string sThresholdPerf { get; set; } = "0.2";
+	public string sField { get; set; } = "35";
+	public string sKF { get; set; } = "5";
+	public string sRadius { get; set; } = "0";
+	public string sResolution { get; set; } = "0";
 	public float fProgressBarValue { get; set; } = 0;
+	public string sRotX { get; set; } = "0";
+	public string sRotY { get; set; } = "0";
+
 
 	int iSampling = 20;
 	int iSpaceX = 10;
 	int iSpaceY = 10;
 	int iSpaceZ = 10;
 	bool[] bUseElt;
+	int iSmooth = 2;
+	float fThresholdPref = 0.2f;
+	float fField = 35f;
+	float fKF = 5.0f;
+	float fRadius = 0;
+	float fResolution = 0;
+	float fRotX = 0;
+	float fRotY = 0;
 
 	public ICommand LoadAtomMemoryCommand { get; }
 	public ICommand UpdateRepCommand { get; }
@@ -78,6 +99,7 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 	public ICommand FilterCommand { get; }
 	public ICommand DeselectAllCluCommand { get; }
 	public ICommand SelectAllCluCommand { get; }
+	public ICommand ResolutionCommand { get; }
 
 	List<double> resultFT3D =new List<double>();
 	float fThreshold = 0;
@@ -114,11 +136,27 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 		FilterCommand = new DelegateCommand(FilterFT3D);
 		SelectAllCluCommand = new DelegateCommand(SelectAllElt);
 		DeselectAllCluCommand = new DelegateCommand(DeselectAllElt);
+		ResolutionCommand = new DelegateCommand(CalculResolution);
 
 		Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
 		Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
 		AddCheckBox();
+	}
+
+	protected override void OnAdded(ViewModelAddedEventArgs eventArgs)
+	{
+		// Keep this line for base class add work
+		Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+		Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+		base.OnAdded(eventArgs);
+		LoadAtomMemory();
+	}
+
+	private void RefreshValue()
+	{
+		sResolution = new string(sResolution);
+		RaisePropertyChanged(nameof(sResolution));
 	}
 
 	IIonData IonDataMemory;
@@ -185,12 +223,21 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 		iSpaceX = int.Parse(sSpaceX);
 		iSpaceY = int.Parse(sSpaceY);
 		iSpaceZ = int.Parse(sSpaceZ);
+		iSmooth = int.Parse(sSmooth);
+		fThresholdPref = float.Parse(sThresholdPerf);
+		fField = float.Parse(sField);
+		fKF = float.Parse(sKF);
+		fRadius = float.Parse(sRadius);
+		fResolution = float.Parse(sResolution);
+		fRotX = float.Parse(sRotX);
+		fRotY = float.Parse(sRotY);
 
 		bUseElt = new bool[CheckBoxItemsElt.Count];
 		for (int i = 0; i < CheckBoxItemsElt.Count; i++)
 		{
 			bUseElt[i] = CheckBoxItemsElt[i].IsSelected;
 		}
+
 	}
 
 	private void SelectAllElt()
@@ -222,6 +269,7 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 			decimal stepX = iSpaceX / (decimal)iSampling;
 			decimal a = (decimal)(iSpaceX / 2f);
 
+			//Grid
 			Console.Write("Grid... ");
 			for (int i = 0; i < iSampling; i++)
 			{
@@ -229,14 +277,26 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 				a -= stepX;
 			}
 			Console.WriteLine("OK " + grid.Count);
+
+			//Find Index of Elt selected
+			Console.Write("ID Selected Atom... ");
+			List<int> idAto = new List<int>();
+			for (int i = 0; i < Atom.iMemSize; i++)
+			{
+				if (Atom.bEltId[i, 0] != 255 && bUseElt[Atom.bEltId[i, 0]])
+				{
+					idAto.Add(i);
+				}
+			}
+			Console.WriteLine("OK " + idAto.Count);
+
 			Console.Write("Calcul FT ... ");
-			List<double> FTX = FFT3D(grid, 0, grid.Count);
+			List<double> FTX = FFT3D(Atom, grid.ToArray(), idAto.ToArray(), 0, grid.Count);
 			Console.WriteLine("OK");
 			Console.WriteLine("FT X " + ExecutionTime.Elapsed.TotalSeconds);
 			for (int j = 0; j < grid.Count; j++)
 			{
 				rep.Add( new Vector3(grid[j].X, 0, (float)FTX[j]));
-				Console.WriteLine(rep[j].X + " "+ rep[j].Z );
 			}
 			data1DFT.Add(_renderDataFactory.CreateLine(rep.ToArray(), Colors.Blue));
 			Console.WriteLine("filter rep  " + rep.Count);
@@ -251,6 +311,7 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 			decimal stepY = iSpaceY / (decimal)iSampling;
 			decimal b = (decimal)(iSpaceY / 2f);
 
+			//Grid
 			Console.Write("Grid... ");
 			for (int i = 0; i < iSampling; i++)
 			{
@@ -258,14 +319,26 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 				b -= stepY;
 			}
 			Console.WriteLine("OK " + grid.Count);
+
+			//Find Index of Elt selected
+			Console.Write("ID Selected Atom... ");
+			List<int> idAto = new List<int>();
+			for (int i = 0; i < Atom.iMemSize; i++)
+			{
+				if (Atom.bEltId[i, 0] != 255 && bUseElt[Atom.bEltId[i, 0]])
+				{
+					idAto.Add(i);
+				}
+			}
+			Console.WriteLine("OK " + idAto.Count);
+
 			Console.Write("Calcul FT ... ");
-			List<double> FTY = FFT3D(grid,0,grid.Count);
+			List<double> FTY = FFT3D(Atom, grid.ToArray(),idAto.ToArray(),0,grid.Count);
 			Console.WriteLine("OK");
 			Console.WriteLine("FT Y " + ExecutionTime.Elapsed.TotalSeconds);
 			for (int j = 0; j < grid.Count; j++)
 			{
 				rep.Add(new Vector3(grid[j].Y, 0, (float)FTY[j]));
-				Console.WriteLine(rep[j].X + " " + rep[j].Z);
 			}
 			data1DFT.Add(_renderDataFactory.CreateLine(rep.ToArray(), Colors.Red));
 			Console.WriteLine("filter rep  " + rep.Count);
@@ -280,6 +353,7 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 			decimal stepZ = iSpaceZ / (decimal)iSampling;
 			decimal c = (decimal)(iSpaceZ / 2f);
 
+			//Grid
 			Console.Write("Grid... ");
 			for (int i = 0; i < iSampling; i++)
 			{
@@ -287,14 +361,26 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 				c -= stepZ;
 			}
 			Console.WriteLine("OK " + grid.Count);
+
+			//Find Index of Elt selected
+			Console.Write("ID Selected Atom... ");
+			List<int> idAto = new List<int>();
+			for (int i = 0; i < Atom.iMemSize; i++)
+			{
+				if (Atom.bEltId[i, 0] != 255 && bUseElt[Atom.bEltId[i, 0]])
+				{
+					idAto.Add(i);
+				}
+			}
+			Console.WriteLine("OK " + idAto.Count);
+
 			Console.Write("Calcul FT ... ");
-			List<double> FTZ = FFT3D(grid,0,grid.Count);
+			List<double> FTZ = FFT3D(Atom, grid.ToArray(), idAto.ToArray(),0,grid.Count);
 			Console.WriteLine("OK");
 			Console.WriteLine("FT Z  " + ExecutionTime.Elapsed.TotalSeconds);
 			for (int j = 0; j < grid.Count; j++)
 			{
 				rep.Add(new Vector3(grid[j].Z, 0, (float)FTZ[j]));
-				Console.WriteLine(rep[j].X + " " + rep[j].Z);
 			}
 			data1DFT.Add(_renderDataFactory.CreateLine(rep.ToArray(), Colors.Black));
 			Console.WriteLine("filter rep  " + rep.Count);
@@ -314,6 +400,7 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 			float stepZ = iSpaceZ/(float)iSampling;
 			float c = iSpaceZ / 2f;
 
+			//Grid
 			Console.Write("Grid... ");
 			for (int i = 0; i < iSampling; i++)
 			{
@@ -332,6 +419,19 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 			}
 			gridFT3D = grid;
 			Console.WriteLine("OK " + grid.Count);
+
+			//Find Index of Elt selected
+			Console.Write("ID Selected Atom... ");
+			List<int> idAto = new List<int>();
+			for (int i = 0; i < Atom.iMemSize; i++)
+			{
+				if (Atom.bEltId[i, 0] != 255 && bUseElt[Atom.bEltId[i, 0]])
+				{
+					idAto.Add(i);
+				}
+			}
+			Console.WriteLine("OK " + idAto.Count);
+
 			Console.Write("Calcul FT ... ");
 
 			//No paralell
@@ -350,7 +450,7 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 				iStop = (i == iNumberOfThread - 1) ? gridFT3D.Count : iStop;
 				Console.WriteLine("id " + i + " start " + iStart + "    stop " + iStop);
 
-				resultPerThread.Add(i, FFT3D(grid, iStart, iStop));
+				resultPerThread.Add(i, FFT3D(Atom, grid.ToArray(), idAto.ToArray(), iStart, iStop)) ;
 			});
 			
 			for (int i = 0; i < resultPerThread.Count; i++)
@@ -419,6 +519,19 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 			}
 
 			Console.WriteLine("OK " + gridFT3D.Count);
+
+			//Find Index of Elt selected
+			Console.Write("ID Selected Atom... ");
+			List<int> idAto = new List<int>();
+			for (int i = 0; i < Atom.iMemSize; i++)
+			{
+				if (Atom.bEltId[i, 0] != 255 && bUseElt[Atom.bEltId[i, 0]])
+				{
+					idAto.Add(i);
+				}
+			}
+			Console.WriteLine("OK " + idAto.Count);
+
 			Console.Write("Calcul FT ... ");
 			//Paralell
 			int iNumberOfThread = Environment.ProcessorCount * 2;
@@ -434,7 +547,7 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 				for(int j = iStart; j < iStop; j++)
 				{
 					List<double> FTThethaPhi = new List<double>();
-					FTThethaPhi.AddRange(FFT3D(map[j], 0, map[j].Count));
+					FTThethaPhi.AddRange(FFT3D(Atom, map[j].ToArray(), idAto.ToArray(), 0, map[j].Count));
 					int index = FTThethaPhi.FindIndex(x =>x ==FTThethaPhi.Max());
 					//Console.WriteLine(j + "   " +index + " " + FTThethaPhi.Max() + " " + map[j][index]);
 					maxThetaPhi.Add(FTThethaPhi.Max());
@@ -499,27 +612,24 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 		}
 	}
 
-	public List<double> FFT3D(List<Vector3> grid, int start, int stop)
+	public List<double> FFT3D(SAtom lstAtoms, Vector3[] grid, int[] idAtom, int start, int stop)
 	{
 		//Complex j = new Complex(0, 1);
 		Complex FF;
 		List<double> val = new List<double>();
 		double angle;
-		for(int i = start; i<stop; i++)
+		for (int i = start; i<stop; i++)
 		{
 			FF = 0;
-			for (int jj = 0; jj < Atom.iMemSize; jj++)
+			for (int jj = 0; jj < idAtom.Length; jj++)
 			{
-				int idElt = (Atom.bEltId[jj, 0] == 255 ? elt.iNbElt : Atom.bEltId[jj, 0]);
-				if (bUseElt[idElt])
-				{
-					angle = -2 * 3.14159f * (grid[i].X * (Atom.fPos[jj, 0]) + grid[i].Y * (Atom.fPos[jj, 1]) + grid[i].Z * (Atom.fPos[jj, 2]));
-					FF += Atom.fMass[jj, 0] * new Complex(Math.Cos(angle), Math.Sin(angle));
-					//FF += Atom.fMass[jj, 0] * (Complex.Exp(2 * 3.14159 * j * (pos.X * (Atom.fPos[jj, 0]) + pos.Y * (Atom.fPos[jj, 1]) + pos.Z * (Atom.fPos[jj, 2]))));
-					//FF +=  (Complex.Exp(2 * 3.14159 * j * (pos.X * (grid[jj].X+1) + pos.Y * (grid[jj].Y + 1) + pos.Z * (grid[jj].Z + 1))));
-				}
+				//Console.WriteLine(Atom.fPos[jj, 0]);
+				angle = -2 * 3.14159f * (grid[i].X * (lstAtoms.fPos[idAtom[jj], 0]) + grid[i].Y * (lstAtoms.fPos[idAtom[jj], 1]) + grid[i].Z * (lstAtoms.fPos[idAtom[jj], 2]));
+				FF += lstAtoms.fMass[idAtom[jj], 0] * new Complex(Math.Cos(angle), Math.Sin(angle));
+				//FF += Atom.fMass[jj, 0] * (Complex.Exp(2 * 3.14159 * j * (pos.X * (Atom.fPos[jj, 0]) + pos.Y * (Atom.fPos[jj, 1]) + pos.Z * (Atom.fPos[jj, 2]))));
+				//FF +=  (Complex.Exp(2 * 3.14159 * j * (pos.X * (grid[jj].X+1) + pos.Y * (grid[jj].Y + 1) + pos.Z * (grid[jj].Z + 1)));
 			}
-			val.Add(FF.Real);
+			val.Add(Math.Sqrt(FF.Real * FF.Real + FF.Imaginary * FF.Imaginary));
 		}
 		return val;
 	}
@@ -541,9 +651,8 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 		}
 		data3DFT.Add(_renderDataFactory.CreatePoints(rep.ToArray(), Colors.Red, "FT3D", true));
 
-
 		//*******
-		List<double> test = new List<double>();
+		/*List<double> test = new List<double>();
 		decimal minSpace = (decimal)(0 - iSpaceZ / 2f);
 		decimal maxSpace = (decimal)(iSpaceZ / 2f);
 		double[] resultFT3DArray = resultFT3D.ToArray(); // Convertir resultFT3D en tableau pour un accès plus rapide
@@ -563,9 +672,334 @@ internal class FourierMViewModel : AnalysisViewModelBase<FourierMNode>
 				}
 			}
 			test.Add(integralFT);
-			Console.WriteLine(i);
+			//Console.WriteLine(i);
 		}
-		test.ForEach(x => Console.WriteLine(x));
+		test.ForEach(x => Console.WriteLine(x));*/
+	}
+
+	/**
+	 * Resolution
+	 **/
+	void CalculResolution()
+	{
+		InitMenuParameters();
+
+		Console.WriteLine("FT Z Reso");
+		List<Vector3> grid = new List<Vector3>();
+		List<Vector3> repZ = new List<Vector3>();
+		decimal stepZ = (decimal)iSpaceZ / (decimal)iSampling;
+		decimal c = (decimal)iSpaceZ / (decimal)2.0;
+
+		double[] FTZ;
+		double max;
+		double[] FTZsmooth;
+		Vector2[] courbe;
+		Vector2[] maximumsLocaux;
+		Vector2[] pics;
+		Vector2 pic;
+
+		//Calculate Grid
+		Console.Write("Grid... ");
+		for (int i = 0; i < iSampling; i++)
+		{
+			grid.Add(new Vector3(0, 0, (float)c));
+			c -= stepZ;
+		}
+		Console.WriteLine("OK " + grid.Count);
+
+		//Find Index of Elt selected
+		Console.Write("ID Selected Atom... ");
+		List<int> idAto = new List<int>();
+		for (int i = 0; i < Atom.iMemSize; i++)
+		{
+			if (Atom.bEltId[i, 0] != 255 && bUseElt[Atom.bEltId[i, 0]])
+			{
+				idAto.Add(i);
+			}
+		}
+		Console.WriteLine("OK " + idAto.Count);
+
+
+		//Pre-tilt
+		SAtom rotX = new SAtom();
+		SAtom rotY = new SAtom();
+		rotX.fPos = RotationAutourAxe(Atom, fRotX * 3.14159f / 180.0f, "X");
+		rotX.iMemSize = Atom.iMemSize;
+		rotX.fMass = Atom.fMass;
+		rotY.fPos = RotationAutourAxe(rotX, fRotY * 3.14159f / 180.0f, "Y");
+		rotY.iMemSize = Atom.iMemSize;
+		rotY.fMass = Atom.fMass;
+
+
+		//Adjust Rotation of volume
+		ExecutionTime.Restart();
+		SAtom rotatedAtoms = new SAtom();
+		rotatedAtoms = AdjustRotationForFourier(rotY, idAto.ToArray(), grid.ToArray(), -5, 5, 0.2f);
+		Console.WriteLine("Timer Adjust Rotation : " + ExecutionTime.Elapsed);
+
+		//FTZ to performances
+		FTZ = FFT3D(rotatedAtoms, grid.ToArray(), idAto.ToArray(), 0, grid.Count).ToArray();
+		max = FTZ.Max();
+		for (int i = 0; i < FTZ.Length; i++)
+		{
+			FTZ[i] = Math.Abs(FTZ[i] / max);
+		}
+		Console.WriteLine("OK");
+		Console.WriteLine("FT Z perf " + ExecutionTime.Elapsed.TotalSeconds);
+
+		FTZsmooth = SmoothData(FTZ, iSmooth);
+
+		courbe = new Vector2[grid.Count];
+		for (int j = 0; j < grid.Count; j++)
+		{
+			repZ.Add(new Vector3(grid[j].Z, 0, (float)FTZ[j]));
+			courbe[j] = new Vector2(grid[j].Z, (float)(FTZsmooth[j]));
+		}
+
+		maximumsLocaux = FindLocalMax(courbe, fThresholdPref);
+
+		for (int j = 0; j < maximumsLocaux.Length; j++)
+		{
+			int id = TrouverIndexParValeurY(courbe, maximumsLocaux[j].Y);
+			maximumsLocaux[j].Y = (float)FTZ[id];
+		}
+
+		pics = CheckKeysWithSameAbsoluteValue(maximumsLocaux);
+		if (pics.Length > 0)
+		{
+			//pic = Array.Find(pics,x => x.Y == pics.Min(x => x.X));
+			pic = pics.Aggregate((max, current) => max.Y > current.Y ? max : current);
+		}
+		else
+		{
+			pic = new Vector2();
+		}
+
+		Console.WriteLine("Peak : " + pic);
+
+		double sigma = pic.X * Math.Sqrt(-1 / (2 * Math.Log(pic.Y)));
+		double delta = 2 * Math.Sqrt(2 * Math.Log(2)) * sigma;
+		fResolution = (float)((1 / delta) * 10);
+		sResolution = fResolution.ToString("0.##");
+		Console.WriteLine("sigma : " + sigma);
+		Console.WriteLine("Reso = " + sResolution + "A");
+		RefreshValue();
+
+		data1DFT.Clear();
+		List<Vector3> rep = new List<Vector3>();
+		for (int j = 0; j < grid.Count; j++)
+		{
+			rep.Add(new Vector3(grid[j].Z, 0, (float)FTZ[j]));
+		}
+		data1DFT.Add(_renderDataFactory.CreateLine(rep.ToArray(), Colors.Black));
+
+		float gaussianValue = 0;
+		Vector3[] gaussianCurve = new Vector3[grid.Count];
+		for (int j = 0; j < grid.Count; j++)
+		{
+			if (sigma != 0) { gaussianValue = (float)Math.Exp(-(grid[j].Z * grid[j].Z) / (2 * sigma * sigma)); } else { gaussianValue = 0; }
+			gaussianCurve[j].Z = gaussianValue;
+			gaussianCurve[j].X = grid[j].Z;
+		}
+		data1DFT.Add(_renderDataFactory.CreateLine(gaussianCurve, Colors.Orange));
+
+	}
+
+	public SAtom AdjustRotationForFourier(SAtom Atoms, int[] id, Vector3[] grid, float angleMin = -10, float angleMax = 10, float step = 0.5f)
+	{
+		SAtom result = new SAtom();
+		double[] FT;
+		double[] FTsmooth;
+		double max;
+		Vector2[] courbe = new Vector2[grid.Length];
+		Vector2[] maximumsLocaux;
+		Vector2[] pics;
+		Vector2 pic;
+		double maxRot = double.MinValue;
+		SAtom rotatedPoints = new SAtom() ;
+		rotatedPoints.fPos = new float[Atoms.iMemSize,3];
+		Array.Copy(Atoms.fPos, rotatedPoints.fPos, Atoms.fPos.Length);
+		rotatedPoints.fMass = new float[Atoms.iMemSize, 2];
+		Array.Copy(Atoms.fMass, rotatedPoints.fMass, Atoms.fMass.Length);
+		rotatedPoints.iMemSize = Atoms.iMemSize;
+		int idMaxY;
+
+		Vector2 rot = new Vector2();
+		for (float angleX = angleMin; angleX <= angleMax; angleX += step)
+		{
+			for (float angleY = angleMin; angleY <= angleMax; angleY += step)
+			{
+				Array.Copy(RotationAutourAxe(Atoms, angleX * 3.14159f / 180.0f, "X"), rotatedPoints.fPos, Atoms.fPos.Length);
+				Array.Copy(RotationAutourAxe(rotatedPoints, angleY * 3.14159f / 180.0f, "Y"), rotatedPoints.fPos, Atoms.fPos.Length);
+
+				FT = FFT3D(rotatedPoints, grid, id, 0, grid.Length).ToArray();
+				max = FT.Max();
+				for (int i = 0; i < FT.Length; i++)
+				{
+					FT[i] = Math.Abs(FT[i] / max);
+				}
+				FTsmooth = SmoothData(FT, iSmooth);
+
+				for (int j = 0; j < grid.Length; j++)
+				{
+					courbe[j] = new Vector2(grid[j].Z, (float)(FTsmooth[j]));
+				}
+
+				maximumsLocaux = FindLocalMax(courbe, fThresholdPref);
+
+				for (int j = 0; j < maximumsLocaux.Length; j++)
+				{
+					idMaxY = TrouverIndexParValeurY(courbe, maximumsLocaux[j].Y);
+					maximumsLocaux[j].Y = (float)FT[idMaxY];
+					//Console.Write(maximumsLocaux[j] + " ;  ");
+				}
+				//Console.WriteLine();
+				pics = CheckKeysWithSameAbsoluteValue(maximumsLocaux);
+				if (pics.Length > 0)
+				{
+					//pic = Array.Find(pics,x => x.Y == pics.Min(x => x.X));
+					pic = pics.Aggregate((max, current) => max.Y > current.Y ? max : current);
+				}
+				else
+				{
+					pic = new Vector2();
+				}
+
+				if (pics.Length > 0 && pic.Y > maxRot)
+				{
+					maxRot = pic.Y;
+					rot.X = angleX;
+					rot.Y = angleY;
+				}
+			}
+		}
+		Console.WriteLine("Rotation" + " : " + rot);
+		result.fPos = new float[Atoms.iMemSize, 3];
+		Array.Copy(RotationAutourAxe(Atoms, rot.X * 3.14159f / 180.0f, "X"), rotatedPoints.fPos, Atoms.fPos.Length);
+		Array.Copy(RotationAutourAxe(rotatedPoints, rot.Y * 3.14159f / 180.0f, "Y"), result.fPos, Atoms.fPos.Length);
+		result.fMass = new float[Atoms.iMemSize, 2];
+		Array.Copy(Atoms.fMass, result.fMass, Atoms.fMass.Length);
+		result.iMemSize = Atoms.iMemSize;
+
+		return result;
+	}
+
+	private float[,] RotationAutourAxe(SAtom nuageDAtomes, float angleEnRadians, string axe)
+	{
+		SAtom resultat = new SAtom();
+		resultat.fPos = new float[nuageDAtomes.iMemSize, 3];
+		Array.Copy(nuageDAtomes.fPos, resultat.fPos, nuageDAtomes.fPos.Length);
+		resultat.fMass = new float[nuageDAtomes.iMemSize, 2];
+		Array.Copy(nuageDAtomes.fMass, resultat.fMass, nuageDAtomes.fMass.Length);
+		resultat.iMemSize = nuageDAtomes.iMemSize;
+
+		// Calculer le centre de la rotation basé sur les positions des atomes
+		Vector3 center = CalculateCenter(nuageDAtomes.fPos);
+
+		// Matrice de rotation autour de l'axe X,Y,Z
+		Matrix4x4 matriceRotation = new Matrix4x4();
+		if (axe == "X")
+		{
+			matriceRotation = Matrix4x4.CreateRotationX(angleEnRadians);
+		}
+		else if (axe == "Y")
+		{
+			matriceRotation = Matrix4x4.CreateRotationY(angleEnRadians);
+		}
+		else if (axe == "Z")
+		{
+			matriceRotation = Matrix4x4.CreateRotationZ(angleEnRadians);
+		}
+
+		// Appliquer la rotation à chaque atome du nuage
+		Vector3 tranlatedPoint;
+		Vector3 pointApresRotation;
+		for (int i = 0; i < nuageDAtomes.fPos.GetLength(0); i++)
+		{
+			tranlatedPoint.X = nuageDAtomes.fPos[i,0] - center.X;
+			tranlatedPoint.Y = nuageDAtomes.fPos[i, 1] - center.Y;
+			tranlatedPoint.Z = nuageDAtomes.fPos[i, 2] - center.Z;
+			pointApresRotation = Vector3.Transform(tranlatedPoint, matriceRotation);
+			resultat.fPos[i, 0] = pointApresRotation.X;
+			resultat.fPos[i, 1] = pointApresRotation.Y;
+			resultat.fPos[i, 2] = pointApresRotation.Z;
+		}
+		return resultat.fPos;
+	}
+
+	static Vector3 CalculateCenter(float[,] points)
+	{
+		Vector3 center = Vector3.Zero;
+
+		for (int i=0; i<points.GetLength(0); i++)
+		{
+			center.X += points[i,0];
+			center.Y += points[i, 1];
+			center.Z += points[i, 2];
+		}
+
+		return center / points.Length;
+	}
+
+	// Méthode pour lisser les données avec une moyenne glissante
+	public double[] SmoothData(double[] data, int windowSize)
+	{
+		double[] smoothedData = new double[data.Length];
+		int halfWindowSize = windowSize / 2;
+		double sum;
+		int count;
+
+		for (int i = 0; i < data.Length; i++)
+		{
+			sum = 0;
+			count = 0;
+			for (int j = -halfWindowSize; j <= halfWindowSize; j++)
+			{
+				if (i + j >= 0 && i + j < data.Length)
+				{
+					sum += data[i + j];
+					count++;
+				}
+			}
+			smoothedData[i] = (sum / count);
+		}
+
+		return smoothedData;
+	}
+
+	public Vector2[] FindLocalMax(Vector2[] courbe, float threshold = 0.1f)
+	{
+		return courbe
+			.Where((point, index) =>
+				index > 1 && index < courbe.Length - 2 &&
+				point.Y > courbe[index - 1].Y &&
+				point.Y >= courbe[index - 2].Y &&
+				point.Y >= courbe[index + 1].Y &&
+				point.Y > courbe[index + 2].Y)
+			.Where(point => point.Y > threshold).ToArray();
+	}
+
+	public int TrouverIndexParValeurY(Vector2[] courbe, float valeurY)
+	{
+		return Array.FindIndex(courbe, point => point.Y == valeurY);
+	}
+
+	public static Vector2[] CheckKeysWithSameAbsoluteValue(Vector2[] tableau)
+	{
+		List<Vector2> pairesAvecMemeValeurAbsolueX = new List<Vector2>();
+
+		for (int i = 0; i < tableau.Length; i++)
+		{
+			for (int j = i + 1; j < tableau.Length; j++)
+			{
+				if (Math.Abs(tableau[i].X) == Math.Abs(tableau[j].X))
+				{
+					pairesAvecMemeValeurAbsolueX.Add(tableau[i]);
+				}
+			}
+		}
+
+		return pairesAvecMemeValeurAbsolueX.Where(v => v.X > 1).ToArray();
 	}
 
 	public float[] GetColumn(float[,] matrix, int columnNumber)
