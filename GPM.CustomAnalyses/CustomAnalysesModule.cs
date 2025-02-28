@@ -3,15 +3,7 @@ using System.IO;
 using System.Text;
 using Cameca.CustomAnalysis.Interface;
 using Cameca.CustomAnalysis.Utilities;
-using Cameca.CustomAnalysis.Utilities.Legacy;
-using GPM.CustomAnalyses.Analyses.ClusterInformation;
-using GPM.CustomAnalyses.Analyses.Clustering;
-using GPM.CustomAnalyses.Analyses.ClusterPosition;
-using GPM.CustomAnalyses.Analyses.MassSpectrum;
-using GPM.CustomAnalyses.Analyses.FrequencyDistribution;
-using GPM.CustomAnalyses.Analyses.SaxeyDiagram;
 //using GPM.CustomAnalyses.Analyses.TestModuleM;
-using GPM.CustomAnalyses.Analyses.FourierTransform;
 using GPM.CustomAnalyses.Analyses.ClusterPositionM;
 using GPM.CustomAnalyses.Analyses.ClusterInformationM;
 //using GPM.CustomAnalyses.Examples.ExampleDataFilter;
@@ -21,10 +13,8 @@ using Prism.Modularity;
 using GPM.CustomAnalyses.Analyses.ClusteringM;
 using GPM.CustomAnalyses.Analyses.LoadMemoryM;
 using GPM.CustomAnalyses.Analyses.FourierM;
-using GPM.CustomAnalyses.Analyses.Reconstruction3DM;
 //using AnalysisFilterTest.SmallExamples;
 //using GPM.CustomAnalyses.Analyses.DataFilteringM;
-using GPM.CustomAnalyses.Analyses.SpatialPerfM;
 using GPM.CustomAnalyses.Analyses.GibbsM;
 
 namespace GPM.CustomAnalyses;
@@ -104,23 +94,11 @@ public class CustomAnalysesModule : IModule
 		containerRegistry.Register<IAnalysisMenuFactory, FourierMMenuFactory>(nameof(FourierMMenuFactory));
 		containerRegistry.Register<object, FourierMViewModel>(FourierMViewModel.UniqueId);
 
-		// Reconstruction 3d Menu
-		containerRegistry.Register<object, Reconstruction3DMNode>(Reconstruction3DMNode.UniqueId);
-		containerRegistry.RegisterInstance(Reconstruction3DMNode.DisplayInfo, Reconstruction3DMNode.UniqueId);
-		containerRegistry.Register<IAnalysisMenuFactory, Reconstruction3DMMenuFactory>(nameof(Reconstruction3DMMenuFactory));
-		containerRegistry.Register<object, Reconstruction3DMViewModel>(Reconstruction3DMViewModel.UniqueId);
-
 		// Filtering
 		/*containerRegistry.Register<object, DataFilteringMNode>(DataFilteringMNode.UniqueId);
 		containerRegistry.RegisterInstance(DataFilteringMNode.DisplayInfo, DataFilteringMNode.UniqueId);
 		containerRegistry.Register<IAnalysisMenuFactory, DataFilteringMMenuFactory>(nameof(DataFilteringMMenuFactory));
 		containerRegistry.Register<object, DataFilteringMViewModel>(DataFilteringMViewModel.UniqueId);*/
-
-		// Spatial Perf Menu
-		containerRegistry.Register<object, SpatialPerfMNode>(SpatialPerfMNode.UniqueId);
-		containerRegistry.RegisterInstance(SpatialPerfMNode.DisplayInfo, SpatialPerfMNode.UniqueId);
-		containerRegistry.Register<IAnalysisMenuFactory, SpatialPerfMMenuFactory>(nameof(SpatialPerfMMenuFactory));
-		containerRegistry.Register<object, SpatialPerfMViewModel>(SpatialPerfMViewModel.UniqueId);
 
 		// Gibbs
 		containerRegistry.Register<object, GibbsMNode>(GibbsMNode.UniqueId);
@@ -189,10 +167,8 @@ public class CustomAnalysesModule : IModule
 		extensionRegistry.RegisterAnalysisView<ClusterInformationMView, ClusterInformationMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<LoadMemoryMView, LoadMemoryMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<FourierMView, FourierMViewModel>(AnalysisViewLocation.Top);
-		extensionRegistry.RegisterAnalysisView<Reconstruction3DMView, Reconstruction3DMViewModel>(AnalysisViewLocation.Top);
 		//extensionRegistry.RegisterAnalysisView<TestModuleMView, TestModuleMViewModel>(AnalysisViewLocation.Top);
 		//extensionRegistry.RegisterAnalysisView<DataFilteringMView, DataFilteringMViewModel>(AnalysisViewLocation.Top);
-		extensionRegistry.RegisterAnalysisView<SpatialPerfMView, SpatialPerfMViewModel>(AnalysisViewLocation.Top);
 		extensionRegistry.RegisterAnalysisView<GibbsMView, GibbsMViewModel>(AnalysisViewLocation.Top);
 
 		// Examples
