@@ -14,7 +14,7 @@ namespace GPM.CustomAnalyses.Analyses.ClusteringM;
 // Base node will create these views when analysis is first created or the node is double-clicked if the view was closed.
 // DefaultViewAttribute supports multiple instances, so a single analysis could easily control more than one view.
 [DefaultView(ClusteringMViewModel.UniqueId, typeof(ClusteringMViewModel))]
-internal class ClusteringMNode : StandardAnalysisNodeBase
+internal class ClusteringMNode : StandardAnalysisNodeBase<EmptyProperties>
 {
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.ClusteringM.ClusteringMNode";
 
@@ -29,8 +29,9 @@ internal class ClusteringMNode : StandardAnalysisNodeBase
 
 	public ClusteringMNode(
 		IStandardAnalysisNodeBaseServices services,
-		IIonDisplayInfoProvider ionDisplayInfoProvider) : base(services)
-	{
+		IIonDisplayInfoProvider ionDisplayInfoProvider,
+        ResourceFactory resourceFactory) : base(services, resourceFactory)
+    {
 		_ionDisplayInfoProvider = ionDisplayInfoProvider;	
 	}
 

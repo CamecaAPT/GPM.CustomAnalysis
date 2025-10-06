@@ -14,7 +14,7 @@ namespace GPM.CustomAnalyses.Analyses.LoadMemoryM;
 // Base node will create these views when analysis is first created or the node is double-clicked if the view was closed.
 // DefaultViewAttribute supports multiple instances, so a single analysis could easily control more than one view.
 [DefaultView(LoadMemoryMViewModel.UniqueId, typeof(LoadMemoryMViewModel))]
-internal class LoadMemoryMNode : StandardAnalysisNodeBase
+internal class LoadMemoryMNode : StandardAnalysisNodeBase<EmptyProperties>
 {
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.LoadMemoryM.LoadMemoryMNode";
 
@@ -32,8 +32,9 @@ internal class LoadMemoryMNode : StandardAnalysisNodeBase
 
 	public LoadMemoryMNode(
 		IStandardAnalysisNodeBaseServices services,
-		IIonDisplayInfoProvider ionDisplayInfoProvider) : base(services)
-	{
+		IIonDisplayInfoProvider ionDisplayInfoProvider,
+        ResourceFactory resourceFactory) : base(services, resourceFactory)
+    {
 		_ionDisplayInfoProvider = ionDisplayInfoProvider;	
 	}
 

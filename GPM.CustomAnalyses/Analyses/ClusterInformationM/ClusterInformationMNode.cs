@@ -12,7 +12,7 @@ namespace GPM.CustomAnalyses.Analyses.ClusterInformationM;
 // Base node will create these views when analysis is first created or the node is double-clicked if the view was closed.
 // DefaultViewAttribute supports multiple instances, so a single analysis could easily control more than one view.
 [DefaultView(ClusterInformationMViewModel.UniqueId, typeof(ClusterInformationMViewModel))]
-internal class ClusterInformationMNode : StandardAnalysisNodeBase
+internal class ClusterInformationMNode : StandardAnalysisNodeBase<EmptyProperties>
 {
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.ClusterInformationM.ClusterInformationMNode";
 
@@ -26,7 +26,8 @@ internal class ClusterInformationMNode : StandardAnalysisNodeBase
 
 	public ClusterInformationMNode(
 		IStandardAnalysisNodeBaseServices services,
-		IIonDisplayInfoProvider ionDisplayInfoProvider) : base(services)
+		IIonDisplayInfoProvider ionDisplayInfoProvider,
+		ResourceFactory resourceFactory) : base(services, resourceFactory)
 	{
 		_ionDisplayInfoProvider = ionDisplayInfoProvider;
 	}

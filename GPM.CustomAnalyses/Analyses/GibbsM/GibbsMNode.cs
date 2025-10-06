@@ -14,7 +14,7 @@ namespace GPM.CustomAnalyses.Analyses.GibbsM;
 // Base node will create these views when analysis is first created or the node is double-clicked if the view was closed.
 // DefaultViewAttribute supports multiple instances, so a single analysis could easily control more than one view.
 [DefaultView(GibbsMViewModel.UniqueId, typeof(GibbsMViewModel))]
-internal class GibbsMNode : StandardAnalysisNodeBase
+internal class GibbsMNode : StandardAnalysisNodeBase<EmptyProperties>
 {
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.GibbsM.GibbsMNode";
 
@@ -32,8 +32,9 @@ internal class GibbsMNode : StandardAnalysisNodeBase
 
 	public GibbsMNode(
 		IStandardAnalysisNodeBaseServices services,
-		IIonDisplayInfoProvider ionDisplayInfoProvider) : base(services)
-	{
+		IIonDisplayInfoProvider ionDisplayInfoProvider,
+        ResourceFactory resourceFactory) : base(services, resourceFactory)
+    {
 		_ionDisplayInfoProvider = ionDisplayInfoProvider;	
 	}
 

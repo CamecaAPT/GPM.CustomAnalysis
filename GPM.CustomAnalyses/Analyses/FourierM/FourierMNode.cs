@@ -14,7 +14,7 @@ namespace GPM.CustomAnalyses.Analyses.FourierM;
 // Base node will create these views when analysis is first created or the node is double-clicked if the view was closed.
 // DefaultViewAttribute supports multiple instances, so a single analysis could easily control more than one view.
 [DefaultView(FourierMViewModel.UniqueId, typeof(FourierMViewModel))]
-internal class FourierMNode : StandardAnalysisNodeBase
+internal class FourierMNode : StandardAnalysisNodeBase<EmptyProperties>
 {
 	public const string UniqueId = "GPM.CustomAnalyses.Analyses.FourierM.FourierMNode";
 
@@ -32,7 +32,8 @@ internal class FourierMNode : StandardAnalysisNodeBase
 
 	public FourierMNode(
 		IStandardAnalysisNodeBaseServices services,
-		IIonDisplayInfoProvider ionDisplayInfoProvider) : base(services)
+		IIonDisplayInfoProvider ionDisplayInfoProvider,
+        ResourceFactory resourceFactory) : base(services, resourceFactory)
 	{
 		_ionDisplayInfoProvider = ionDisplayInfoProvider;	
 	}
